@@ -1,9 +1,11 @@
 const { User } = require('../models/user');
 const { ctrlWrapper, HttpError } = require('../helpers');
-
+const fs = require('fs/promises');
+const Jimp = require('jimp');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-
+const path = require('path');
+const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -77,20 +79,30 @@ const logout = async (req, res) => {
     });
 };
 
-const updateSubscription = async (req, res) => {
+const updateProfile = async (req, res) => {
     const { _id } = req.user;
+    const { name, email, birthday, phone, skype } = req.body;
+    const { path: tempUpload, originalname } = req.file;
     const result = await User.findByIdAndUpdate(_id, req.body, {
-        new: true,
+        name: name,
+        email: email,
+        birthday: birthday,
+        phone: phone,
+        skype: skype,
     });
-
-    console.log(req.body);
-    if (!result) {
-        throw new HttpError(404, 'Not found');
-    }
-    res.json({
-        name: result.name,
-        subscription: result.subscription,
-    });
+    await Jimp.read(`${tempUpload}`)
+        .then(image => {
+            return image.resize(250, 250).writeAsync(`${tempUpload}`); // save
+        })
+        .catch(err => {
+            console.error(err);
+        });
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarDir, filename);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL });
+    res.json({ status: 'OK', avatarURL, result });
 };
 
 module.exports = {
@@ -98,5 +110,5 @@ module.exports = {
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
-    updateSubscription: ctrlWrapper(updateSubscription),
+    updateProfile: ctrlWrapper(updateProfile),
 };
