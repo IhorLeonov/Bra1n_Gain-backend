@@ -1,4 +1,5 @@
-const { HttpError, ctrlWrapper } = require('../helpers');
+const { ctrlWrapper, HttpError } = require('../helpers');
+
 const { Contact } = require('../models/contact.js');
 
 const getAllContacts = async (req, res) => {
@@ -32,7 +33,6 @@ const getContactById = async (req, res) => {
 const addContact = async (req, res) => {
     const { _id: owner } = req.user;
     const result = await Contact.create({ ...req.body, owner });
-
     res.status(201).json(result);
 };
 

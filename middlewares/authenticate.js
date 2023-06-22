@@ -11,7 +11,7 @@ const authenticate = async (req, res, next) => {
     const [bearer, token] = authorization.split(' ');
 
     if (bearer !== 'Bearer') {
-        return next(new HttpError(401));
+        next(new HttpError(401));
     }
 
     try {
@@ -19,7 +19,7 @@ const authenticate = async (req, res, next) => {
         const user = await User.findById(id);
 
         if (!user || !user.token || user.token !== token) {
-            return next(new HttpError(401));
+            next(new HttpError(401));
         }
         req.user = user;
         next();

@@ -1,20 +1,14 @@
 const express = require('express');
+
 const ctrl = require('../../controllers/users-controllers');
 
-const { validateBody, authenticate, upload } = require('../../middlewares');
+const { validateBody, authenticate } = require('../../middlewares');
+
 const { schemas } = require('../../schemas/user-schema');
 
 const router = express.Router();
 
 router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
-
-router.get('/verify/:verificationToken', ctrl.verifyEmail);
-
-router.post(
-    '/verify',
-    validateBody(schemas.emailSchema),
-    ctrl.resendVerifyEmail
-);
 
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
 
@@ -27,13 +21,6 @@ router.patch(
     authenticate,
     validateBody(schemas.updateSubscriptionSchema),
     ctrl.updateSubscription
-);
-
-router.patch(
-    '/avatars',
-    authenticate,
-    upload.single('avatar'),
-    ctrl.updateAvatar
 );
 
 module.exports = router;

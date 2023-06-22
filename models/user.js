@@ -26,18 +26,6 @@ const userSchema = new Schema(
             enum: subscriptionList,
             default: 'starter',
         },
-        avatarURL: {
-            type: String,
-            required: true,
-        },
-        verify: {
-            type: Boolean,
-            default: false,
-        },
-        verificationToken: {
-            type: String,
-            required: [true, 'Verify token is required'],
-        },
         token: {
             type: String,
             default: '',
