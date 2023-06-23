@@ -5,7 +5,7 @@ const Jimp = require('jimp');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
-const avatarDir = path.join(__dirname, '../', 'public', 'avatars');
+const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -78,31 +78,46 @@ const logout = async (req, res) => {
         message: 'Logout succeess',
     });
 };
+const updateAvatar = async (req, res) => {
+    const { _id } = req.user;
+    const { path: oldPath, filename } = req.file;
+
+    const newPath = path.join(avatarsDir, filename);
+    await fs.rename(oldPath, newPath);
+    const avatarUrl = path.join('public', 'avatars', filename);
+
+    const normalizedAvatar = Jimp.read(avatarUrl)
+        .then(img => {
+            return img.resize(250, 250).write(avatarUrl);
+        })
+        .catch(error => {
+            throw new HttpError(404, `${error.message}`);
+        });
+
+    const result = await User.findByIdAndUpdate(_id, normalizedAvatar, {
+        new: true,
+    });
+
+    if (!result) {
+        throw new HttpError(404, 'Not found');
+    }
+
+    res.json({
+        user: result.email,
+        avatarURL: avatarUrl,
+    });
+};
 
 const updateProfile = async (req, res) => {
-    const { _id } = req.user;
-    const { name, email, birthday, phone, skype } = req.body;
-    const { path: tempUpload, originalname } = req.file;
-    const result = await User.findByIdAndUpdate(_id, req.body, {
-        name: name,
-        email: email,
-        birthday: birthday,
-        phone: phone,
-        skype: skype,
+    req.body.avatar = req.file?.path;
+
+    const { name, email, birthday, token, phone, skype, avatarUrl } =
+        await User.findByIdAndUpdate(req.user.id, req.body);
+
+    res.status(200).json({
+        user: { name, email, birthday, phone, skype, avatarUrl },
+        token,
     });
-    await Jimp.read(`${tempUpload}`)
-        .then(image => {
-            return image.resize(250, 250).writeAsync(`${tempUpload}`); // save
-        })
-        .catch(err => {
-            console.error(err);
-        });
-    const filename = `${_id}_${originalname}`;
-    const resultUpload = path.join(avatarDir, filename);
-    await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join('avatars', filename);
-    await User.findByIdAndUpdate(_id, { avatarURL });
-    res.json({ status: 'OK', avatarURL, result });
 };
 
 module.exports = {
@@ -110,5 +125,6 @@ module.exports = {
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
+    updateAvatar: ctrlWrapper(updateAvatar),
     updateProfile: ctrlWrapper(updateProfile),
 };
