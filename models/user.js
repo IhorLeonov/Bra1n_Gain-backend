@@ -22,25 +22,23 @@ const userSchema = new Schema(
             minlength: 6,
             required: [true, 'Password is required'],
         },
-        // subscription: {
-        //     type: String,
-        //     enum: subscriptionList,
-        //     default: 'starter',
-        // },
         birthday: {
             type: String,
             required: false,
+            default: '',
         },
         phone: {
             type: String,
             match: phoneRegexp,
             required: false,
+            default: '',
         },
         skype: {
             type: String,
             required: false,
+            default: '',
         },
-        avatarURL: {
+        avatarUrl: {
             type: String,
             required: false,
         },

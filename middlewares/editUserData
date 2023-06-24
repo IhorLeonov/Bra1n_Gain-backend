@@ -1,0 +1,19 @@
+const { User } = require('../models/user');
+const { HttpError } = require('../helpers');
+
+const editUserData = async (id, data) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            id,
+            {
+                ...data,
+            },
+            { new: true }
+        );
+        return user;
+    } catch (error) {
+        throw new HttpError(500, error.message);
+    }
+};
+
+module.exports = editUserData;

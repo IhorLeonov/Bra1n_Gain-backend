@@ -26,10 +26,10 @@ router.patch(
     authenticate,
     upload.single('avatarUrl'),
 
+    // validateBody(schemas.validateUserProfile),
     validateUserProfile,
-    // validateUserProfile(schemas.updateUserProfileSchema),
-    ctrl.updateAvatar,
     ctrl.updateProfile
+    // ctrl.updateUserAvatar
 );
 
 module.exports = router;

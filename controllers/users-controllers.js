@@ -5,12 +5,15 @@ const Jimp = require('jimp');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const path = require('path');
+const gravatar = require('gravatar');
+const { catchAsync } = require('../utils');
 const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
+    const avatarUrl = gravatar.url(email);
 
     if (user) {
         throw new HttpError(409, 'Email already in use');
@@ -18,13 +21,17 @@ const register = async (req, res) => {
 
     const hashPassword = await bcrypt.hash(password, 10);
 
-    const newUser = await User.create({ ...req.body, password: hashPassword });
+    const newUser = await User.create({
+        ...req.body,
+        password: hashPassword,
+        avatarUrl,
+    });
 
     res.status(201).json({
         user: {
             name: newUser.name,
             email: newUser.email,
-            subscription: newUser.subscription,
+            avatarUrl,
         },
     });
 };
@@ -61,12 +68,20 @@ const login = async (req, res) => {
 };
 
 const getCurrent = async (req, res) => {
-    const { email, name, subscription } = req.user;
+    const { name, email, birthday, token, phone, skype, avatarUrl } = req.user;
 
     res.json({
-        email,
-        name,
-        subscription,
+        status: 'success',
+        code: 200,
+        user: {
+            name,
+            birthday,
+            email,
+            phone,
+            skype,
+            avatarUrl,
+        },
+        token,
     });
 };
 
@@ -78,53 +93,46 @@ const logout = async (req, res) => {
         message: 'Logout succeess',
     });
 };
-const updateAvatar = async (req, res) => {
+const updateUserAvatar = async (req, res) => {
     const { _id } = req.user;
-    const { path: oldPath, filename } = req.file;
-
-    const newPath = path.join(avatarsDir, filename);
-    await fs.rename(oldPath, newPath);
-    const avatarUrl = path.join('public', 'avatars', filename);
-
-    const normalizedAvatar = Jimp.read(avatarUrl)
-        .then(img => {
-            return img.resize(250, 250).write(avatarUrl);
+    console.log(req.body);
+    const { path: tempUpload, originalname } = req.file;
+    await Jimp.read(`${tempUpload}`)
+        .then(image => {
+            return image.resize(250, 250).writeAsync(`${tempUpload}`); // save
         })
-        .catch(error => {
-            throw new HttpError(404, `${error.message}`);
+        .catch(err => {
+            console.error(err);
         });
-
-    const result = await User.findByIdAndUpdate(_id, normalizedAvatar, {
-        new: true,
-    });
-
-    if (!result) {
-        throw new HttpError(404, 'Not found');
-    }
-
+    const filename = `${_id}_${originalname}`;
+    const resultUpload = path.join(avatarsDir, filename);
+    await fs.rename(tempUpload, resultUpload);
+    const avatarURL = path.join('avatars', filename);
+    await User.findByIdAndUpdate(_id, { avatarURL }, req.body, { new: true });
     res.json({
-        user: result.email,
-        avatarURL: avatarUrl,
+        avatarURL,
     });
 };
 
-const updateProfile = async (req, res) => {
-    req.body.avatar = req.file?.path;
-
-    const { name, email, birthday, token, phone, skype, avatarUrl } =
-        await User.findByIdAndUpdate(req.user.id, req.body);
+const updateProfile = catchAsync(async (req, res, next) => {
+    const { _id } = req.user;
+    if (req.file) {
+        req.body.avatarUrl = req.file.path;
+    }
+    const user = await User.findByIdAndUpdate(_id, req.body, {
+        new: true,
+    }).select('-password -updatedAt -createdAt -token');
 
     res.status(200).json({
-        user: { name, email, birthday, phone, skype, avatarUrl },
-        token,
+        data: user,
     });
-};
+});
 
 module.exports = {
     register: ctrlWrapper(register),
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
-    updateAvatar: ctrlWrapper(updateAvatar),
+    updateUserAvatar: ctrlWrapper(updateUserAvatar),
     updateProfile: ctrlWrapper(updateProfile),
 };
