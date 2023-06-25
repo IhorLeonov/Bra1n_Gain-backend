@@ -4,6 +4,7 @@ const cors = require('cors');
 require('dotenv').config();
 
 const usersRouter = require('./routes/api/users-routes');
+const tasksRouter = require('./routes/api/tasks-routes');
 const contactsRouter = require('./routes/api/contacts-routes');
 const reviewsRouter = require('./routes/api/reviews-routes');
 
@@ -17,6 +18,7 @@ app.use(express.static('public'));
 
 app.use('/users', usersRouter);
 app.use('/api/contacts', contactsRouter);
+app.use('/api/tasks', tasksRouter);
 app.use('/api/reviews', reviewsRouter);
 
 app.use((req, res) => {
