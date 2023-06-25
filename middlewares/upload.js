@@ -1,40 +1,23 @@
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const multer = require('multer');
-const path = require('path');
+require('dotenv').config();
 
-const { HttpError } = require('../helpers');
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET_KEY,
+});
 
-const destination = path.resolve('temp');
-const dateNow = new Date().toLocaleDateString('en-GB').split('/').join('-');
-
-const storage = multer.diskStorage({
-    destination,
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    folder: 'avatars',
+    allowedFormats: ['jpg', 'png'],
     filename: (req, file, cb) => {
-        const uniquePrefix = dateNow + '_' + Math.round(Math.random() * 1e3);
-        const newName = `${uniquePrefix}_${file.originalname}`;
-        cb(null, newName);
+        cb(null, file.originalname);
     },
 });
 
-const limits = {
-    fileSize: 1024 * 1024,
-};
-
-const fileFilter = (req, file, cb) => {
-    const { mimetype } = file;
-    if (mimetype === 'image/jpeg' || mimetype === 'image/png') {
-        cb(null, true);
-    } else {
-        cb(
-            new HttpError(400, 'File can have only .jpeg or .png extension'),
-            false
-        );
-    }
-};
-
-const upload = multer({
-    storage,
-    limits,
-    fileFilter,
-});
+const upload = multer({ storage });
 
 module.exports = upload;
