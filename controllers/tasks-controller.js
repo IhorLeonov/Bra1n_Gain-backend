@@ -1,5 +1,12 @@
 const expressAsyncHandler = require('express-async-handler');
-const tasksServices = require('../services');
+const {
+    show,
+    showById,
+    add,
+    change,
+    changeCategory,
+    remove,
+} = require('../services');
 const getCurentMonth = require('../helpers/dataTime');
 
 const getFilter = params => {
@@ -9,7 +16,7 @@ const getFilter = params => {
     if (day) {
         filter = day;
     } else if (month) {
-        folter = month.slice(0, 8);
+        filter = month.slice(0, 8);
     } else {
         filter = getCurentMonth();
     }
@@ -17,56 +24,60 @@ const getFilter = params => {
     return filter;
 };
 
-class ControllerTasks {
-    // Get all tasks
-    getTasks = expressAsyncHandler(async (req, res) => {
-        const { _id: owner } = req.user;
-        const filter = getFilter({ ...req.query });
-        const tasks = await tasksServices.show(owner, filter);
+// Get all tasks
+const getTasks = expressAsyncHandler(async (req, res) => {
+    const { _id: owner } = req.user;
+    const filter = getFilter({ ...req.query });
+    const tasks = await show(owner, filter);
 
-        res.status(200).json({ code: 200, data: tasks, count: tasks.length });
-    });
+    res.status(200).json({ code: 200, data: tasks, count: tasks.length });
+});
 
-    // Get task by id
-    getTaskById = expressAsyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const task = await tasksServices.showById(id);
+// Get task by id
+const getTaskById = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const task = await showById(id);
 
-        res.status(200).json({ code: 200, data: task });
-    });
+    res.status(200).json({ code: 200, data: task });
+});
 
-    // Add task
-    addTask = expressAsyncHandler(async (req, res) => {
-        const { _id: owner } = req.params;
-        const task = await tasksServices.add(owner, { ...req.body });
+// Add task
+const addTask = expressAsyncHandler(async (req, res) => {
+    const { _id: owner } = req.params;
+    const task = await add(owner, { ...req.body });
 
-        res.status(200).json({ code: 200, data: task });
-    });
+    res.status(200).json({ code: 200, data: task });
+});
 
-    // Change task
-    changeTask = expressAsyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const task = await tasksServices.change(id, { ...req.body });
+// Change task
+const changeTask = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const task = await change(id, { ...req.body });
 
-        res.status(200).json({ code: 200, data: task });
-    });
+    res.status(200).json({ code: 200, data: task });
+});
 
-    // Change task category
-    changeTaskCategory = expressAsyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const task = await tasksServices.changeCategory(id, { ...req.body });
+// Change task category
+const changeTaskCategory = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const task = await changeCategory(id, { ...req.body });
 
-        res.status(200).json({ code: 200, data: task });
-    });
+    res.status(200).json({ code: 200, data: task });
+});
 
-    // Delete task
-    deleteTask = expressAsyncHandler(async (req, res) => {
-        const { id } = req.params;
-        const review = await tasksServices.remove(id);
+// Delete task
+const deleteTask = expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+    const review = await remove(id);
 
-        res.status(200).json({ code: 200, data: review });
-    });
-}
+    res.status(200).json({ code: 200, data: review });
+});
 
-const controllerTasks = new ControllerTasks();
-module.exports = controllerTasks;
+module.exports = {
+    getTasks,
+    getTaskById,
+    addTask,
+    changeTask,
+    changeTaskCategory,
+    deleteTask,
+};

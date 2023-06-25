@@ -17,11 +17,13 @@ router.get('/:id', authenticate, isValidId, controller.getTaskById);
 router.post('/', authenticate, validateBody(schemaAddTask), controller.addTask);
 
 // Change task
-router.put('/:id'),
+router.put(
+    '/:id',
     authenticate,
     isValidId,
     validateBody(schemaAddTask),
-    controller.changeTask;
+    controller.changeTask
+);
 
 // Change task category
 router.patch(
