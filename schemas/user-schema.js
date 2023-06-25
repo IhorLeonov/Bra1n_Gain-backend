@@ -14,15 +14,15 @@ const loginSchema = Joi.object({
     password: Joi.string().min(6).required(),
 });
 
-const updateUserProfileSchema = Joi.object({
-    name: Joi.string().required(),
-    email: Joi.string().pattern(emailRegexp).required(),
-    birthday: Joi.string(),
-    // phone: Joi.string().pattern(phoneRegexp),
-    phone: Joi.string(),
-    skype: Joi.string(),
-    avatarURL: Joi.string(),
-});
+const updateUserProfileSchema = data =>
+    Joi.object({
+        name: Joi.string(),
+        email: Joi.string().pattern(emailRegexp),
+        birthday: Joi.string(),
+        // phone: Joi.string().pattern(phoneRegexp),
+        phone: Joi.string(),
+        skype: Joi.string(),
+    }).validate(data);
 
 const schemas = {
     registerSchema,
