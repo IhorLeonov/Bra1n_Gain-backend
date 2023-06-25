@@ -1,13 +1,13 @@
 const { User } = require('../models/user');
 const { ctrlWrapper, HttpError } = require('../helpers');
-const fs = require('fs/promises');
-const Jimp = require('jimp');
+// const fs = require('fs/promises');
+// const Jimp = require('jimp');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const path = require('path');
+// const path = require('path');
 const gravatar = require('gravatar');
 const { catchAsync } = require('../utils');
-const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
+// const avatarsDir = path.join(__dirname, '../', 'public', 'avatars');
 const { SECRET_KEY } = process.env;
 
 const register = async (req, res) => {
@@ -93,26 +93,26 @@ const logout = async (req, res) => {
         message: 'Logout succeess',
     });
 };
-const updateUserAvatar = async (req, res) => {
-    const { _id } = req.user;
-    console.log(req.body);
-    const { path: tempUpload, originalname } = req.file;
-    await Jimp.read(`${tempUpload}`)
-        .then(image => {
-            return image.resize(250, 250).writeAsync(`${tempUpload}`); // save
-        })
-        .catch(err => {
-            console.error(err);
-        });
-    const filename = `${_id}_${originalname}`;
-    const resultUpload = path.join(avatarsDir, filename);
-    await fs.rename(tempUpload, resultUpload);
-    const avatarURL = path.join('avatars', filename);
-    await User.findByIdAndUpdate(_id, { avatarURL }, req.body, { new: true });
-    res.json({
-        avatarURL,
-    });
-};
+// const updateUserAvatar = async (req, res) => {
+//     const { _id } = req.user;
+//     console.log(req.body);
+//     const { path: tempUpload, originalname } = req.file;
+//     await Jimp.read(`${tempUpload}`)
+//         .then(image => {
+//             return image.resize(250, 250).writeAsync(`${tempUpload}`); // save
+//         })
+//         .catch(err => {
+//             console.error(err);
+//         });
+//     const filename = `${_id}_${originalname}`;
+//     const resultUpload = path.join(avatarsDir, filename);
+//     await fs.rename(tempUpload, resultUpload);
+//     const avatarURL = path.join('avatars', filename);
+//     await User.findByIdAndUpdate(_id, { avatarURL }, req.body, { new: true });
+//     res.json({
+//         avatarURL,
+//     });
+// };
 
 const updateProfile = catchAsync(async (req, res, next) => {
     const { _id } = req.user;
@@ -133,6 +133,6 @@ module.exports = {
     login: ctrlWrapper(login),
     getCurrent: ctrlWrapper(getCurrent),
     logout: ctrlWrapper(logout),
-    updateUserAvatar: ctrlWrapper(updateUserAvatar),
+    // updateUserAvatar: ctrlWrapper(updateUserAvatar),
     updateProfile: ctrlWrapper(updateProfile),
 };
