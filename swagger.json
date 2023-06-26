@@ -382,6 +382,369 @@
           }
         }
       }
+    },
+    "/api/tasks": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get tasks",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Task"
+                      }
+                    },
+                    "count": {
+                      "type": "integer",
+                      "example": 2
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorFetchTasks"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Tasks"],
+        "summary": "Create a new task",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorAddTask"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/tasks/{id}": {
+      "get": {
+        "tags": ["Tasks"],
+        "summary": "Get task by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorProccessingTask"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "put": {
+        "tags": ["Tasks"],
+        "summary": "Update a task",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaskInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorProccessingTask"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Tasks"],
+        "summary": "Delete a task",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorProccessingTask"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/api/tasks/{id}/category": {
+      "patch": {
+        "tags": ["Tasks"],
+        "summary": "Change task category",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of the task",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "integer",
+                      "example": 200
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorProccessingTask"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -392,17 +755,21 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "User's name"
+            "description": "User's name",
+            "example": "John Johnson"
           },
           "email": {
             "type": "string",
             "description": "User's email",
-            "format": "email"
+            "format": "email",
+            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+            "example": "joe@example.com"
           },
           "password": {
             "type": "string",
             "description": "User's password",
-            "minLength": 6
+            "minLength": 6,
+            "example": "1a2b3c"
           }
         }
       },
@@ -414,12 +781,15 @@
             "properties": {
               "name": {
                 "type": "string",
-                "description": "User's name"
+                "description": "User's name",
+                "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "format": "email"
+                "format": "email",
+                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+                "example": "joe@example.com"
               },
               "avatarUrl": {
                 "type": "string",
@@ -437,12 +807,15 @@
           "email": {
             "type": "string",
             "description": "User's email",
-            "format": "email"
+            "format": "email",
+            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+            "example": "joe@example.com"
           },
           "password": {
             "type": "string",
             "description": "User's password",
-            "minLength": 6
+            "minLength": 6,
+            "example": "1a2b3c"
           }
         },
         "required": ["email", "password"]
@@ -458,12 +831,15 @@
             "properties": {
               "name": {
                 "type": "string",
-                "description": "User's name"
+                "description": "User's name",
+                "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "format": "email"
+                "format": "email",
+                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+                "example": "joe@example.com"
               }
             },
             "required": ["name", "email"]
@@ -476,35 +852,44 @@
         "properties": {
           "status": {
             "type": "string",
-            "description": "Response text"
+            "description": "Response text",
+            "example": "success"
           },
           "code": {
             "type": "integer",
             "description": "Response code",
-            "format": "int32"
+            "format": "int32",
+            "example": 200
           },
           "user": {
             "type": "object",
             "properties": {
               "name": {
                 "type": "string",
-                "description": "User's name"
+                "description": "User's name",
+                "example": "John Johnson"
               },
               "birthday": {
-                "type": "string"
+                "type": "string",
+                "description": "User's date of birth"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "format": "email"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "format": "email",
+                "example": "joe@example.com"
               },
               "phone": {
                 "type": "string",
-                "description": "User's phone number"
+                "description": "User's phone number",
+                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+                "example": "888-7777-9999"
               },
               "skype": {
                 "type": "string",
-                "description": "User's skype"
+                "description": "User's skype",
+                "example": "john.johnson"
               },
               "avatarUrl": {
                 "type": "string",
@@ -532,7 +917,8 @@
         "properties": {
           "message": {
             "type": "string",
-            "description": "Response message"
+            "description": "Response message",
+            "example": "Logout succeess"
           }
         },
         "required": ["message"]
@@ -542,12 +928,15 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "User's name"
+            "description": "User's name",
+            "example": "John Johnson"
           },
           "email": {
             "type": "string",
             "description": "User's email",
-            "format": "email"
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "format": "email",
+            "example": "joe@example.com"
           },
           "birthday": {
             "type": "string",
@@ -555,11 +944,14 @@
           },
           "phone": {
             "type": "string",
-            "description": "User's phone number"
+            "description": "User's phone number",
+            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+            "example": "888-7777-9999"
           },
           "skype": {
             "type": "string",
-            "description": "User's skype"
+            "description": "User's skype",
+            "example": "john.johnson"
           }
         }
       },
@@ -571,12 +963,15 @@
             "properties": {
               "name": {
                 "type": "string",
-                "description": "User's name"
+                "description": "User's name",
+                "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "format": "email"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "format": "email",
+                "example": "joe@example.com"
               },
               "birthday": {
                 "type": "string",
@@ -584,11 +979,14 @@
               },
               "phone": {
                 "type": "string",
-                "description": "User's phone number"
+                "description": "User's phone number",
+                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
+                "example": "888-7777-9999"
               },
               "skype": {
                 "type": "string",
-                "description": "User's skype"
+                "description": "User's skype",
+                "example": "john.johnson"
               },
               "avatarUrl": {
                 "type": "string",
@@ -612,38 +1010,46 @@
         "properties": {
           "_id": {
             "type": "string",
-            "description": "Review id"
+            "description": "Review id",
+            "example": "31d9792ab5a6b4a1a06dd56b"
           },
           "name": {
             "type": "string",
-            "description": "Reviewer name"
+            "description": "Reviewer name",
+            "example": "John Johnson"
           },
           "avatarUrl": {
             "type": "string",
-            "description": "Reviewer avatar Url"
+            "description": "Reviewer avatar Url",
+            "example": "https://res.cloudinary.com/example/image/upload/123456/avatar.jpg"
           },
           "rate": {
             "type": "number",
             "description": "Reviewer rate",
-            "enum": [1, 2, 3, 4, 5]
+            "enum": [1, 2, 3, 4, 5],
+            "example": 5
           },
           "comment": {
             "type": "string",
-            "description": "Reviewer comment"
+            "description": "Reviewer comment",
+            "example": "This is a comment"
           },
           "owner": {
             "type": "string",
-            "description": "User's id who left the review"
+            "description": "User's id who left the review",
+            "example": "31d9792ab5a6b4a1a06dd56b"
           },
           "createdAt": {
             "type": "string",
             "description": "Review creation time",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-06-24T19:29:20.003+00:00"
           },
           "updatedAt": {
             "type": "string",
             "description": "Review update time",
-            "format": "date-time"
+            "format": "date-time",
+            "example": "2023-06-24T19:29:20.003+00:00"
           }
         }
       },
@@ -653,14 +1059,123 @@
           "rate": {
             "type": "number",
             "description": "Reviewer rate",
-            "enum": [1, 2, 3, 4, 5]
+            "enum": [1, 2, 3, 4, 5],
+            "example": 5
           },
           "comment": {
             "type": "string",
-            "description": "Reviewer comment"
+            "description": "Reviewer comment",
+            "example": "This is a comment"
           }
         },
         "required": ["rate", "comment"]
+      },
+      "Task": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Task id",
+            "example": "60d9792ab4a6b4a2a06dd50a"
+          },
+          "title": {
+            "type": "string",
+            "description": "Task title",
+            "example": "Task Title"
+          },
+          "date": {
+            "type": "string",
+            "description": "Task creation date",
+            "example": "2023-06-24"
+          },
+          "start": {
+            "type": "string",
+            "description": "Task start time",
+            "example": "10:00"
+          },
+          "end": {
+            "type": "string",
+            "description": "Task end time",
+            "example": "11:00"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task execution priority",
+            "enum": ["low", "medium", "high"],
+            "example": "low"
+          },
+          "category": {
+            "type": "string",
+            "description": "Task execution progress",
+            "enum": ["to-do", "in-progress", "done"],
+            "example": "to-do"
+          },
+          "owner": {
+            "type": "string",
+            "description": "Id owner of task",
+            "example": "60d9792ab4a6b4a2a06dd50b"
+          }
+        }
+      },
+      "TaskInput": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "descroption": "Task title",
+            "maxLength": 250,
+            "example": "Task Title"
+          },
+          "date": {
+            "type": "string",
+            "description": "Task creation date",
+            "pattern": "[1-9][0-9][0-9]{2}-([0][1-9]|[1][0-2])-([1-2][0-9]|[0][1-9]|[3][0-1])",
+            "minLength": 10,
+            "maxLength": 10,
+            "example": "2023-06-24"
+          },
+          "start": {
+            "type": "string",
+            "description": "Task start time",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "minLength": 5,
+            "maxLength": 5,
+            "example": "10:00"
+          },
+          "end": {
+            "type": "string",
+            "description": "Task end time",
+            "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+            "minLength": 5,
+            "maxLength": 5,
+            "example": "11:00"
+          },
+          "priority": {
+            "type": "string",
+            "description": "Task execution priority",
+            "enum": ["low", "medium", "high"],
+            "example": "low"
+          },
+          "category": {
+            "type": "string",
+            "description": "Task execution progress",
+            "enum": ["to-do", "in-progress", "done"],
+            "example": "to-do"
+          }
+        },
+        "required": ["title", "date", "start", "end", "priority", "category"]
+      },
+      "CategoryInput": {
+        "type": "object",
+        "properties": {
+          "category": {
+            "type": "string",
+            "description": "Task execution progress",
+            "enum": ["to-do", "in-progress", "done"],
+            "example": "in-progress"
+          }
+        },
+        "required": ["category"]
       },
       "errorRegister": {
         "type": "object",
@@ -697,14 +1212,41 @@
             "example": "Review not found or does not exist"
           }
         }
+      },
+      "errorFetchTasks": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unable to fetch tasks"
+          }
+        }
+      },
+      "errorProccessingTask": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unable to find task"
+          }
+        }
+      },
+      "errorAddTask": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Unable to save to the database"
+          }
+        }
       }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
-      }
+    }
+  },
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
     }
   }
 }
