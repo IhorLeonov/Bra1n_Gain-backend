@@ -1,0 +1,710 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "Goose Track Documentation",
+    "description": "Our application is a powerful task management tool designed to help users efficiently plan and track their daily tasks. With it, users will be able to organize their work, set tasks for certain days and monitor progress. The application has a handy calendar that allows users to assign tasks to specific dates. They will be able to see all scheduled tasks for a given day and manage their time efficiently.\n\nUsers can create accounts in the application to have access to its functionality. Registration provides a secure and unique identification name for each user. Authentication and authorization provide data protection and differentiation of access rights between users. Encryption of passwords and identification using tokens will ensure the security of user accounts.\n\nOur application adheres to high security standards, offering the user a reliable and secure environment for managing tasks. We strive to provide ease of use and convenience without forgetting the importance of data security.\n\n<strong>Main functionality includes: </strong> \n\n- registration, \n\n- login, \n\n- authorization, \n\n- viewing and creating feedback about the application, \n\n- creating, editing and viewing: outstanding, in progress and completed tasks, \n\n- displaying statistics for a month or a day for a specific type of task.\n\n<strong>Main technology stack:</strong>\n\nNode.js - a JavaScript runtime that allows you to run JavaScript code on the server.\n\n Express.js - minimalistic and flexible framework for developing web applications on Node.js.\n\n MongoDB - flexible and scalable NoSQL database.\n\n Mongoose - an object document model (ODM) for Node.js that provides an easy way to interact with the MongoDB database.",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    }
+  },
+  "servers": [
+    { "url": "http://localhost:3000", "description": "Development server" },
+    {
+      "url": " https://bra1n-gain-backend.onrender.com/",
+      "description": "Production server"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Auth",
+      "description": "Authorization endpoints"
+    },
+    {
+      "name": "Reviews",
+      "description": "Reviews endpoints"
+    },
+    {
+      "name": "Tasks",
+      "description": "Tasks endpoints"
+    }
+  ],
+  "paths": {
+    "/users/register": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Register a new user",
+        "requestBody": {
+          "description": "Registration's object",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User registered successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (invalid request body)"
+          },
+          "409": {
+            "description": "Email already in use",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorRegister"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User login",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorLogin"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Get current user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Current user retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentUserResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "User logout",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logout successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/users/profile": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user profile",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateProfileRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profile updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UpdateProfileResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
+    "/api/reviews": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get all reviews",
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Review"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reviews/own": {
+      "get": {
+        "tags": ["Reviews"],
+        "summary": "Get own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthorized"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorNotFoundReview"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Reviews"],
+        "summary": "Add own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Review created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorAddOwnReview"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Reviews"],
+        "summary": "Update own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Review updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Review"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorNotFoundReview"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Reviews"],
+        "summary": "Delete own review",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Review deleted"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/errorNotFoundReview"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterRequest": {
+        "type": "object",
+        "required": ["name", "email", "password"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 6
+          }
+        }
+      },
+      "RegisterResponse": {
+        "type": "object",
+        "properties": {
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "description": "User's avatar Url"
+              }
+            },
+            "required": ["name", "email", "avatarUrl"]
+          }
+        },
+        "required": ["user"]
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 6
+          }
+        },
+        "required": ["email", "password"]
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              }
+            },
+            "required": ["name", "email"]
+          }
+        },
+        "required": ["token", "user"]
+      },
+      "GetCurrentResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "description": "Response text"
+          },
+          "code": {
+            "type": "integer",
+            "description": "Response code",
+            "format": "int32"
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "birthday": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "phone": {
+                "type": "string",
+                "description": "User's phone number"
+              },
+              "skype": {
+                "type": "string",
+                "description": "User's skype"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "description": "User's avatar Url"
+              }
+            },
+            "required": [
+              "name",
+              "birthday",
+              "email",
+              "phone",
+              "skype",
+              "avatarUrl"
+            ]
+          },
+          "token": {
+            "type": "string",
+            "description": "User's Token"
+          }
+        },
+        "required": ["status", "code", "user", "token"]
+      },
+      "LogoutResponse": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "description": "Response message"
+          }
+        },
+        "required": ["message"]
+      },
+      "UpdateProfileRequest": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name"
+          },
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email"
+          },
+          "birthday": {
+            "type": "string",
+            "description": "User's birthday"
+          },
+          "phone": {
+            "type": "string",
+            "description": "User's phone number"
+          },
+          "skype": {
+            "type": "string",
+            "description": "User's skype"
+          }
+        }
+      },
+      "UpdateProfileResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "User's name"
+              },
+              "email": {
+                "type": "string",
+                "description": "User's email",
+                "format": "email"
+              },
+              "birthday": {
+                "type": "string",
+                "description": "User's birthday"
+              },
+              "phone": {
+                "type": "string",
+                "description": "User's phone number"
+              },
+              "skype": {
+                "type": "string",
+                "description": "User's skype"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "description": "User's avatar Url"
+              }
+            },
+            "required": [
+              "name",
+              "email",
+              "birthday",
+              "phone",
+              "skype",
+              "avatarUrl"
+            ]
+          }
+        },
+        "required": ["data"]
+      },
+      "Review": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "description": "Review id"
+          },
+          "name": {
+            "type": "string",
+            "description": "Reviewer name"
+          },
+          "avatarUrl": {
+            "type": "string",
+            "description": "Reviewer avatar Url"
+          },
+          "rate": {
+            "type": "number",
+            "description": "Reviewer rate",
+            "enum": [1, 2, 3, 4, 5]
+          },
+          "comment": {
+            "type": "string",
+            "description": "Reviewer comment"
+          },
+          "owner": {
+            "type": "string",
+            "description": "User's id who left the review"
+          },
+          "createdAt": {
+            "type": "string",
+            "description": "Review creation time",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "description": "Review update time",
+            "format": "date-time"
+          }
+        }
+      },
+      "ReviewInput": {
+        "type": "object",
+        "properties": {
+          "rate": {
+            "type": "number",
+            "description": "Reviewer rate",
+            "enum": [1, 2, 3, 4, 5]
+          },
+          "comment": {
+            "type": "string",
+            "description": "Reviewer comment"
+          }
+        },
+        "required": ["rate", "comment"]
+      },
+      "errorRegister": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email already in use"
+          }
+        }
+      },
+      "errorLogin": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Email or password is wrong"
+          }
+        }
+      },
+      "errorAddOwnReview": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "You have already left a review"
+          }
+        }
+      },
+      "errorNotFoundReview": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "Review not found or does not exist"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}

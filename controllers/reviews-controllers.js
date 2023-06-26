@@ -67,7 +67,7 @@ const deleteOwnReview = async (req, res) => {
     }
 
     res.json({
-        message: 'Contact deleted',
+        message: 'Review deleted',
     });
 };
 
