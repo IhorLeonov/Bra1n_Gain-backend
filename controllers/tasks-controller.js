@@ -42,7 +42,7 @@ const getTaskById = expressAsyncHandler(async (req, res) => {
 });
 
 // Add task
-addTask = expressAsyncHandler(async (req, res) => {
+const addTask = expressAsyncHandler(async (req, res) => {
   const { _id: owner } = req.user;
   const task = await add(owner, { ...req.body });
 
