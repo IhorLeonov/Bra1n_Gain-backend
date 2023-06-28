@@ -17,10 +17,22 @@ router.get('/:id', authenticate, controller.getTaskById);
 router.post('/', authenticate, controller.addTask);
 
 // Change task
-router.put('/:id',authenticate,validateBody(schemaAddTask),controller.changeTask);
+router.put(
+  '/:id',
+  authenticate,
+  isValidId,
+  validateBody(schemaAddTask),
+  controller.changeTask
+);
 
 // Change task category
-router.patch('/:id/category',authenticate,isValidId,validateBody(schemaChangeTaskCategory));
+router.patch(
+  '/:id/category',
+  authenticate,
+  isValidId,
+  validateBody(schemaChangeTaskCategory),
+  controller.changeTaskCategory
+);
 
 // Delete task
 router.delete('/:id', authenticate, controller.deleteTask);
