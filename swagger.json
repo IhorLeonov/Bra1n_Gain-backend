@@ -776,8 +776,14 @@
       "RegisterResponse": {
         "type": "object",
         "properties": {
+          "token": {
+            "type": "string",
+            "description": "Access token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjViMjRhM2E1OTY0MzYzMzM1ZTNkMGM3ZCIsImlhdCI6MTYzMDUwNDIyNCwiZXhwIjoxNjMwNTk2NjI0fQ.C6b9LlsNFlrM6Ggr98hWe2fF_Damih9MZhsfwXZj9Ks"
+          },
           "user": {
             "type": "object",
+            "description": "User data",
             "properties": {
               "name": {
                 "type": "string",
