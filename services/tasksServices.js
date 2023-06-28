@@ -2,7 +2,7 @@ const { Task } = require('../models/task');
 const { HttpError } = require('../helpers');
 
 const show = async (owner, filter) => {
-  const tasks = await modelTask.find(
+  const tasks = await Task.find(
     { owner, date: { $regex: filter, $options: 'i' } },
     '-createdAt -updatedAt -__v'
   );

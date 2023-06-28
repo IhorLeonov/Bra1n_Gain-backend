@@ -11,28 +11,18 @@ const {
 router.get('/', authenticate, controller.getTasks);
 
 // Get task by id
-router.get('/:id', authenticate, isValidId, controller.getTaskById);
+router.get('/:id', authenticate, controller.getTaskById);
 
 // Add task
-router.post('/', authenticate, validateBody(schemaAddTask), controller.addTask);
+router.post('/', authenticate, controller.addTask);
 
 // Change task
-router.put(
-  '/:id',
-  authenticate,
-  validateBody(schemaAddTask),
-  controller.changeTask
-);
+router.put('/:id',authenticate,validateBody(schemaAddTask),controller.changeTask);
 
 // Change task category
-router.patch(
-  '/:id/category',
-  authenticate,
-  isValidId,
-  validateBody(schemaChangeTaskCategory)
-);
+router.patch('/:id/category',authenticate,isValidId,validateBody(schemaChangeTaskCategory));
 
 // Delete task
-router.delete('/:id', authenticate, isValidId, controller.deleteTask);
+router.delete('/:id', authenticate, controller.deleteTask);
 
 module.exports = router;
