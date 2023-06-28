@@ -20,6 +20,7 @@ router.post('/', authenticate, controller.addTask);
 router.put(
   '/:id',
   authenticate,
+  isValidId,
   validateBody(schemaAddTask),
   controller.changeTask
 );
@@ -28,7 +29,9 @@ router.put(
 router.patch(
   '/:id/category',
   authenticate,
-  validateBody(schemaChangeTaskCategory)
+  isValidId,
+  validateBody(schemaChangeTaskCategory),
+  controller.changeTaskCategory
 );
 
 // Delete task
