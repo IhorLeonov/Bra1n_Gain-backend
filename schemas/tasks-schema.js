@@ -54,7 +54,8 @@ const schemas = {
   schemaChangeCategoryTask,
 };
 
-const modelTask = model('task', taskSchema);
+//! Глянь чо ета?))) Мне ошибки кидает на это в виде "model id not defined" и "taskSchema is not defined"
+const modelTask = model('task', taskSchema); 
 
 module.exports = {
   modelTask,

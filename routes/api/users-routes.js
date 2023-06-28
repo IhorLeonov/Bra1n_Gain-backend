@@ -25,11 +25,8 @@ router.patch(
     '/profile',
     authenticate,
     upload.single('avatarUrl'),
-
-    // validateBody(schemas.validateUserProfile),
     validateUserProfile,
     ctrl.updateProfile
-    // ctrl.updateUserAvatar
 );
 
 module.exports = router;

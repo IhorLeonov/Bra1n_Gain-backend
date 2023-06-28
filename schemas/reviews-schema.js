@@ -7,6 +7,7 @@ const reviewSchema = Joi.object({
         .valid(...reviewRateList)
         .messages({
             'any.only': 'rate is incorrect',
+            "any.required": `"rate" is a required field`,
         }),
     comment: Joi.string().required().messages({
         'string.empty': `"comment" cannot be an empty field`,
