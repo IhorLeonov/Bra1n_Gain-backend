@@ -3,8 +3,8 @@ const router = express.Router();
 const controller = require('../../controllers/tasks-controller');
 const { validateBody, isValidId, authenticate } = require('../../middlewares');
 const {
-    schemaAddTask,
-    schemaChangeTaskCategory,
+  schemaAddTask,
+  schemaChangeTaskCategory,
 } = require('../../models/task');
 
 // Get all tasks
@@ -18,19 +18,18 @@ router.post('/', authenticate, validateBody(schemaAddTask), controller.addTask);
 
 // Change task
 router.put(
-    '/:id',
-    authenticate,
-    isValidId,
-    validateBody(schemaAddTask),
-    controller.changeTask
+  '/:id',
+  authenticate,
+  validateBody(schemaAddTask),
+  controller.changeTask
 );
 
 // Change task category
 router.patch(
-    '/:id/category',
-    authenticate,
-    isValidId,
-    validateBody(schemaChangeTaskCategory)
+  '/:id/category',
+  authenticate,
+  isValidId,
+  validateBody(schemaChangeTaskCategory)
 );
 
 // Delete task
