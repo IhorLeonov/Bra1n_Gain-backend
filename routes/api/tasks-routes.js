@@ -7,7 +7,6 @@ const controller = require('../../controllers/tasks-controller');
 //! Ниже я показываю пример, где должна быть
 const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
-
 const {
   schemaAddTask,
   schemaChangeTaskCategory,
@@ -17,7 +16,7 @@ const {
 router.get('/', authenticate, controller.getTasks);
 
 // Get task by id
-router.get('/:id', authenticate, controller.getTaskById); //! Например здесь должно быть так router.get('/:id', authenticate, isValidId, controller.getTaskById)
+router.get('/:id', authenticate, isValidId, controller.getTaskById); //! Например здесь должно быть так router.get('/:id', authenticate, isValidId, controller.getTaskById)
 
 // Add task
 router.post('/', authenticate, controller.addTask);
@@ -41,6 +40,6 @@ router.patch(
 );
 
 // Delete task
-router.delete('/:id', authenticate, controller.deleteTask);
+router.delete('/:id', authenticate, isValidId, controller.deleteTask);
 
 module.exports = router;
