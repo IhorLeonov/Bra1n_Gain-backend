@@ -107,24 +107,24 @@ const logout = async (req, res) => {
 const updateProfile = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
 
-  const user = await User.findById(_id).select('createdAt');
+  // const user = await User.findById(_id).select('createdAt');
 
   if (req.file) {
     req.body.avatarUrl = req.file.path;
   }
 
-  const { birthday } = req.body;
-  if (birthday) {
-    const registrationDate = new Date(user.createdAt);
-    const userBirthday = new Date(birthday);
+  // const { birthday } = req.body;
+  // if (birthday) {
+  //   const registrationDate = new Date(user.createdAt);
+  //   const userBirthday = new Date(birthday);
 
-    if (userBirthday > registrationDate) {
-      throw new HttpError(
-        400,
-        'Date of birth cannot be later than the date of registration'
-      );
-    }
-  }
+  //   if (userBirthday > registrationDate) {
+  //     throw new HttpError(
+  //       400,
+  //       'Date of birth cannot be later than the date of registration'
+  //     );
+  //   }
+  // }
 
   const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
