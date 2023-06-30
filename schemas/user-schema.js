@@ -44,14 +44,14 @@ const updateUserProfileSchema = data =>
     // email: Joi.string(),
     // birthday: Joi.string(),
     // phone: Joi.string(),
-    name: Joi.string().max(16).required().messages({
+    name: Joi.string().max(16).messages({
       'string.max': `"Name" should have a maximum length of {#limit}`,
-      'any.required': `"Name" is a required field`,
+      // 'any.required': `"Name" is a required field`,
     }),
-    email: Joi.string().pattern(emailRegexp).required().messages({
+    email: Joi.string().pattern(emailRegexp).messages({
       'string.pattern.base': `"Email" is invalid`,
       'string.empty': `"Email" cannot be an empty field`,
-      'any.required': `"Email" is a required field`,
+      // 'any.required': `"Email" is a required field`,
     }),
     birthday: Joi.string(),
     // .pattern(birthdayRegexp).optional().messages({
