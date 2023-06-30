@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/tasks-controller');
 const { validateBody, isValidId, authenticate } = require('../../middlewares');
+
 const {
   schemaAddTask,
   schemaChangeTaskCategory,

@@ -1,19 +1,19 @@
 const { User } = require('../models/user');
 const { ctrlWrapper, HttpError } = require('../helpers');
 const { catchAsync } = require('../utils');
-const gravatar = require('gravatar');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = process.env;
 
+const defaultAvatar =
+  'https://cdn-icons-png.flaticon.com/512/424/424792.png?w=740&t=st=1688068895~exp=1688069495~hmac=ca26790f6996963b36060759faa8d3f9a08cfbbcf2f14f62684885583ab495be';
+
 const register = async (req, res) => {
   const { email, password } = req.body;
   const user = await User.findOne({ email });
-  
-  //! изменить на картинку гуся 
-  //! и последнее - в самом конце, когда доделаем приложение до финала, можно сделать верификацию через email
-  const avatarUrl = gravatar.url(email); 
+
+  const avatarUrl = defaultAvatar;
 
   if (user) {
     throw new HttpError(409, 'Email already in use');
@@ -33,13 +33,14 @@ const register = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
   await User.findByIdAndUpdate(newUser._id, { token });
-  
+
   res.status(201).json({
     token,
     user: {
       name: newUser.name,
       email: newUser.email,
       avatarUrl,
+      createdAt: newUser.createdAt,
     },
   });
 };
@@ -71,7 +72,7 @@ const login = async (req, res) => {
       name: user.name,
       email: user.email,
       subscription: user.subscription,
-      avatarUrl: user.avatarUrl
+      avatarUrl: user.avatarUrl,
     },
   });
 };
@@ -105,15 +106,32 @@ const logout = async (req, res) => {
 
 const updateProfile = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
+
+  const user = await User.findById(_id).select('createdAt');
+
   if (req.file) {
     req.body.avatarUrl = req.file.path;
   }
-  const user = await User.findByIdAndUpdate(_id, req.body, {
+
+  const { birthday } = req.body;
+  if (birthday) {
+    const registrationDate = new Date(user.createdAt);
+    const userBirthday = new Date(birthday);
+
+    if (userBirthday > registrationDate) {
+      throw new HttpError(
+        400,
+        'Date of birth cannot be later than the date of registration'
+      );
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   }).select('-password -updatedAt -createdAt -token');
 
   res.status(200).json({
-    data: user,
+    data: updatedUser,
   });
 });
 
