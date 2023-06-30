@@ -106,15 +106,32 @@ const logout = async (req, res) => {
 
 const updateProfile = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
+
+  const user = await User.findById(_id).select('createdAt');
+
   if (req.file) {
     req.body.avatarUrl = req.file.path;
   }
-  const user = await User.findByIdAndUpdate(_id, req.body, {
+
+  const { birthday } = req.body;
+  if (birthday) {
+    const registrationDate = new Date(user.createdAt);
+    const userBirthday = new Date(birthday);
+
+    if (userBirthday > registrationDate) {
+      throw new HttpError(
+        400,
+        'Date of birth cannot be later than the date of registration'
+      );
+    }
+  }
+
+  const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   }).select('-password -updatedAt -createdAt -token');
 
   res.status(200).json({
-    data: user,
+    data: updatedUser,
   });
 });
 

@@ -2,13 +2,14 @@ const { Schema, model } = require('mongoose');
 const { handleMongooseError } = require('../helpers');
 
 const emailRegexp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/; // eslint-disable-line
-const phoneRegexp = /^\+?([0-9]{2})\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$/;
-// const subscriptionList = ['starter', 'pro', 'business'];
+const phoneRegexp = /^\+\d{12}$/;
+const birthdayRegexp = /^(19|20)\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
 
 const userSchema = new Schema(
     {
         name: {
             type: String,
+            maxlength: 16,
             required: true,
         },
         email: {
@@ -24,6 +25,7 @@ const userSchema = new Schema(
         },
         birthday: {
             type: String,
+            match: birthdayRegexp,
             required: false,
             default: '',
         },
@@ -36,6 +38,7 @@ const userSchema = new Schema(
         skype: {
             type: String,
             required: false,
+            maxlength: 16,
             default: '',
         },
         avatarUrl: {

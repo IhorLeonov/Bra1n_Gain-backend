@@ -247,7 +247,7 @@
             }
           },
           "400": {
-            "description": "Unauthorized"
+            "description": "Bad Request"
           },
           "401": {
             "description": "Unauthorized"
@@ -756,14 +756,15 @@
           "name": {
             "type": "string",
             "description": "User's name",
+            "maxlength": 16,
             "example": "John Johnson"
           },
           "email": {
             "type": "string",
             "description": "User's email",
             "format": "email",
-            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-            "example": "joe@example.com"
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "example": "johndoe@example.com"
           },
           "password": {
             "type": "string",
@@ -788,14 +789,15 @@
               "name": {
                 "type": "string",
                 "description": "User's name",
+                "maxlength": 16,
                 "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
                 "format": "email",
-                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-                "example": "joe@example.com"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "example": "johndoe@example.com"
               },
               "avatarUrl": {
                 "type": "string",
@@ -805,7 +807,7 @@
             "required": ["name", "email", "avatarUrl"]
           }
         },
-        "required": ["user"]
+        "required": ["token", "user"]
       },
       "LoginRequest": {
         "type": "object",
@@ -814,8 +816,8 @@
             "type": "string",
             "description": "User's email",
             "format": "email",
-            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-            "example": "joe@example.com"
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "example": "johndoe@example.com"
           },
           "password": {
             "type": "string",
@@ -838,14 +840,15 @@
               "name": {
                 "type": "string",
                 "description": "User's name",
+                "maxlength": 16,
                 "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
                 "format": "email",
-                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-                "example": "joe@example.com"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "example": "johndoe@example.com"
               }
             },
             "required": ["name", "email"]
@@ -873,28 +876,32 @@
               "name": {
                 "type": "string",
                 "description": "User's name",
+                "maxlength": 16,
                 "example": "John Johnson"
               },
               "birthday": {
                 "type": "string",
-                "description": "User's date of birth"
+                "description": "User's date of birth",
+                "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+                "example": "1995-08-30"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
                 "format": "email",
-                "example": "joe@example.com"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "example": "johndoe@example.com"
               },
               "phone": {
                 "type": "string",
                 "description": "User's phone number",
-                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-                "example": "888-7777-9999"
+                "pattern": "^\\+\\d{12}$",
+                "example": "+123456789012"
               },
               "skype": {
                 "type": "string",
                 "description": "User's skype",
+                "maxlength": 16,
                 "example": "john.johnson"
               },
               "avatarUrl": {
@@ -935,28 +942,32 @@
           "name": {
             "type": "string",
             "description": "User's name",
+            "maxlength": 16,
             "example": "John Johnson"
           },
           "email": {
             "type": "string",
             "description": "User's email",
-            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
             "format": "email",
-            "example": "joe@example.com"
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "example": "johndoe@example.com"
           },
           "birthday": {
             "type": "string",
-            "description": "User's birthday"
+            "description": "User's birthday",
+            "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+            "example": "1995-08-30"
           },
           "phone": {
             "type": "string",
             "description": "User's phone number",
-            "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-            "example": "888-7777-9999"
+            "pattern": "^\\+\\d{12}$",
+            "example": "+123456789012"
           },
           "skype": {
             "type": "string",
             "description": "User's skype",
+            "maxlength": 16,
             "example": "john.johnson"
           }
         }
@@ -970,28 +981,32 @@
               "name": {
                 "type": "string",
                 "description": "User's name",
+                "maxlength": 16,
                 "example": "John Johnson"
               },
               "email": {
                 "type": "string",
                 "description": "User's email",
-                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
                 "format": "email",
-                "example": "joe@example.com"
+                "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+                "example": "johndoe@example.com"
               },
               "birthday": {
                 "type": "string",
-                "description": "User's birthday"
+                "description": "User's birthday",
+                "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
+                "example": "1995-08-30"
               },
               "phone": {
                 "type": "string",
                 "description": "User's phone number",
-                "pattern": "^\\+?([0-9]{2})\\)?[-. ]?([0-9]{4})[-. ]?([0-9]{4})$",
-                "example": "888-7777-9999"
+                "pattern": "^\\+\\d{12}$",
+                "example": "+123456789012"
               },
               "skype": {
                 "type": "string",
                 "description": "User's skype",
+                "maxlength": 16,
                 "example": "john.johnson"
               },
               "avatarUrl": {
