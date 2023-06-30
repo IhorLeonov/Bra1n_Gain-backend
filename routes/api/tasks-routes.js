@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const controller = require('../../controllers/tasks-controller');
-
 const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 const {
   schemaAddTask,
   schemaChangeTaskCategory,
-} = require('../../models/task');
+} = require('../../schemas/tasks-schema');
 
 // Get all tasks
 router.get('/', authenticate, controller.getTasks);
