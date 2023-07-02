@@ -106,9 +106,7 @@ const logout = async (req, res) => {
 
 const updateProfile = catchAsync(async (req, res, next) => {
   const { _id } = req.user;
-
   const user = await User.findById(_id).select('createdAt');
-
   if (req.file) {
     req.body.avatarUrl = req.file.path;
   }
@@ -135,10 +133,28 @@ const updateProfile = catchAsync(async (req, res, next) => {
   });
 });
 
+const updateUserPassword = catchAsync(async (req, res, next) => {
+  const { _id } = req.user;
+  const user = await User.findById(_id);
+  const { email, password, newPassword } = req.body;
+
+  const passwordCompare = await bcrypt.compare(password, user.password);
+  if (!passwordCompare) {
+    throw new HttpError(401, 'Email or password is wrong');
+  }
+  const hashPassword = await bcrypt.hash(newPassword, 10);
+  await User.findByIdAndUpdate(_id, {
+    password: hashPassword,
+  });
+
+  res.status(200).json({ email, message: 'Change password success' });
+});
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   getCurrent: ctrlWrapper(getCurrent),
   logout: ctrlWrapper(logout),
   updateProfile: ctrlWrapper(updateProfile),
+  updateUserPassword: ctrlWrapper(updateUserPassword),
 };
