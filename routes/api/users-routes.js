@@ -31,7 +31,7 @@ router.patch(
 router.patch(
   '/profile/pass',
   authenticate,
-  //   validateBody(schemas.passUpdSchema),
+  validateBody(schemas.passUpdSchema),
   ctrl.updateUserPassword
 );
 module.exports = router;
