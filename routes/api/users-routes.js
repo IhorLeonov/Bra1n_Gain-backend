@@ -29,6 +29,13 @@ router.patch(
   ctrl.updateProfile
 );
 
+router.patch(
+  '/profile/pass',
+  authenticate,
+  validateBody(schemas.passUpdSchema),
+  ctrl.updateUserPassword
+);
+
 // router.get('/verify/:verificationCode', ctrl.verifyEmail);
 
 // router.post(

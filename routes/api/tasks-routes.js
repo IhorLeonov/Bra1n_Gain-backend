@@ -5,7 +5,7 @@ const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 const {
   schemaAddTask,
-  schemaChangeTaskCategory,
+    schemaChangeCategoryTask,
 } = require('../../schemas/tasks-schema');
 
 // Get all tasks
@@ -31,7 +31,7 @@ router.patch(
   '/:id/category',
   authenticate,
   isValidId,
-  validateBody(schemaChangeTaskCategory),
+  validateBody(schemaChangeCategoryTask),
   controller.changeTaskCategory
 );
 

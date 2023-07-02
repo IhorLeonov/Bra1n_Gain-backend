@@ -59,15 +59,34 @@ const updateUserProfileSchema = data =>
     }),
   }).validate(data);
 
-  const emailSchema = Joi.object({
-    email: Joi.string().pattern(emailRegexp).required(),
-  });
+const passUpdSchema = Joi.object({
+  email: Joi.string().pattern(emailRegexp).required().messages({
+    'string.pattern.base': `"Email" is invalid`,
+    'string.empty': `"Email" cannot be an empty field`,
+    'any.required': `"Email" is a required field`,
+  }),
+  password: Joi.string().min(6).required().messages({
+    'string.empty': `"Password" cannot be an empty field`,
+    'string.min': `"Password" should have a minimum length of {#limit}`,
+    'any.required': `"Password" is a required field`,
+  }),
+  newPassword: Joi.string().min(6).required().messages({
+    'string.empty': `"Password" cannot be an empty field`,
+    'string.min': `"Password" should have a minimum length of {#limit}`,
+    'any.required': `"Password" is a required field`,
+  }),
+});
+
+//   const emailSchema = Joi.object({
+//     email: Joi.string().pattern(emailRegexp).required(),
+//   });
 
 const schemas = {
   registerSchema,
   loginSchema,
   updateUserProfileSchema,
-  emailSchema,
+  passUpdSchema,
+//   emailSchema,
 };
 
 module.exports = {
