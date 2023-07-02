@@ -3,13 +3,13 @@ const { schemas } = require('../schemas/user-schema');
 const { catchAsync } = require('../utils');
 
 const validateUserProfile = catchAsync(async (req, res, next) => {
-    const { error, value } = schemas.updateUserProfileSchema(req.body);
+  const { error, value } = schemas.updateUserProfileSchema(req.body);
 
-    if (error) return next(new HttpError(400, error.details[0].message));
+  if (error) return next(new HttpError(400, error.details[0].message));
 
-    req.body = value;
+  req.body = value;
 
-    next();
+  next();
 });
 
 module.exports = validateUserProfile;
