@@ -3,10 +3,10 @@ const express = require('express');
 const ctrl = require('../../controllers/users-controllers');
 
 const {
-    validateBody,
-    authenticate,
-    upload,
-    validateUserProfile,
+  validateBody,
+  authenticate,
+  upload,
+  validateUserProfile,
 } = require('../../middlewares');
 
 const { schemas } = require('../../schemas/user-schema');
@@ -22,11 +22,19 @@ router.get('/current', authenticate, ctrl.getCurrent);
 router.post('/logout', authenticate, ctrl.logout);
 
 router.patch(
-    '/profile',
-    authenticate,
-    upload.single('avatarUrl'),
-    validateUserProfile,
-    ctrl.updateProfile
+  '/profile',
+  authenticate,
+  upload.single('avatarUrl'),
+  validateUserProfile,
+  ctrl.updateProfile
 );
+
+// router.get('/verify/:verificationCode', ctrl.verifyEmail);
+
+// router.post(
+//   '/verify',
+//   validateBody(schemas.emailSchema),
+//   ctrl.resendVerifyEmail
+// );
 
 module.exports = router;

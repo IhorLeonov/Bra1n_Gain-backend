@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
+    "version": "1.0.2",
     "title": "Goose Track Documentation",
     "description": "Our application is a powerful task management tool designed to help users efficiently plan and track their daily tasks. With it, users will be able to organize their work, set tasks for certain days and monitor progress. The application has a handy calendar that allows users to assign tasks to specific dates. They will be able to see all scheduled tasks for a given day and manage their time efficiently.\n\nUsers can create accounts in the application to have access to its functionality. Registration provides a secure and unique identification name for each user. Authentication and authorization provide data protection and differentiation of access rights between users. Encryption of passwords and identification using tokens will ensure the security of user accounts.\n\nOur application adheres to high security standards, offering the user a reliable and secure environment for managing tasks. We strive to provide ease of use and convenience without forgetting the importance of data security.\n\n<strong>Main functionality includes: </strong> \n\n- registration, \n\n- login, \n\n- authorization, \n\n- viewing and creating feedback about the application, \n\n- creating, editing and viewing: outstanding, in progress and completed tasks, \n\n- displaying statistics for a month or a day for a specific type of task.\n\n<strong>Main technology stack:</strong>\n\nNode.js - a JavaScript runtime that allows you to run JavaScript code on the server.\n\n Express.js - minimalistic and flexible framework for developing web applications on Node.js.\n\n MongoDB - flexible and scalable NoSQL database.\n\n Mongoose - an object document model (ODM) for Node.js that provides an easy way to interact with the MongoDB database.",
     "license": {
@@ -882,8 +882,8 @@
               "birthday": {
                 "type": "string",
                 "description": "User's date of birth",
-                "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
-                "example": "1995-08-30"
+                "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+                "example": "30/08/1995"
               },
               "email": {
                 "type": "string",
@@ -896,13 +896,13 @@
                 "type": "string",
                 "description": "User's phone number",
                 "pattern": "^\\+\\d{12}$",
-                "example": "+123456789012"
+                "example": "+380123456789"
               },
               "skype": {
                 "type": "string",
                 "description": "User's skype",
                 "maxlength": 16,
-                "example": "john.johnson"
+                "example": "+38012345678"
               },
               "avatarUrl": {
                 "type": "string",
@@ -955,20 +955,20 @@
           "birthday": {
             "type": "string",
             "description": "User's birthday",
-            "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
-            "example": "1995-08-30"
+            "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+            "example": "30/08/1995"
           },
           "phone": {
             "type": "string",
             "description": "User's phone number",
             "pattern": "^\\+\\d{12}$",
-            "example": "+123456789012"
+            "example": "+380123456789"
           },
           "skype": {
             "type": "string",
             "description": "User's skype",
             "maxlength": 16,
-            "example": "john.johnson"
+            "example": "+38012345678"
           }
         }
       },
@@ -994,20 +994,20 @@
               "birthday": {
                 "type": "string",
                 "description": "User's birthday",
-                "pattern": "^(19|20)\\d{2}-(0[1-9]|1[0-2])-(0[1-9]|[12]\\d|3[01])$",
-                "example": "1995-08-30"
+                "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+                "example": "30/08/1995"
               },
               "phone": {
                 "type": "string",
                 "description": "User's phone number",
                 "pattern": "^\\+\\d{12}$",
-                "example": "+123456789012"
+                "example": "+380123456789"
               },
               "skype": {
                 "type": "string",
                 "description": "User's skype",
                 "maxlength": 16,
-                "example": "john.johnson"
+                "example": "+38012345678"
               },
               "avatarUrl": {
                 "type": "string",
