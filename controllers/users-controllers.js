@@ -140,7 +140,7 @@ const updateUserPassword = catchAsync(async (req, res, next) => {
 
   const passwordCompare = await bcrypt.compare(password, user.password);
   if (!passwordCompare) {
-    throw new HttpError(401, 'Email or password is wrong');
+    throw new HttpError(400, 'Bad Request: email or password is wrong');
   }
   const hashPassword = await bcrypt.hash(newPassword, 10);
   await User.findByIdAndUpdate(_id, {
