@@ -28,10 +28,20 @@ router.patch(
   validateUserProfile,
   ctrl.updateProfile
 );
+
 router.patch(
   '/profile/pass',
   authenticate,
   validateBody(schemas.passUpdSchema),
   ctrl.updateUserPassword
 );
+
+// router.get('/verify/:verificationCode', ctrl.verifyEmail);
+
+// router.post(
+//   '/verify',
+//   validateBody(schemas.emailSchema),
+//   ctrl.resendVerifyEmail
+// );
+
 module.exports = router;
