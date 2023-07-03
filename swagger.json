@@ -902,7 +902,7 @@
                 "type": "string",
                 "description": "User's skype",
                 "maxlength": 16,
-                "example": "+38012345678"
+                "example": "+380123456789"
               },
               "avatarUrl": {
                 "type": "string",
@@ -968,7 +968,7 @@
             "type": "string",
             "description": "User's skype",
             "maxlength": 16,
-            "example": "+38012345678"
+            "example": "+380123456789"
           }
         }
       },
@@ -1007,7 +1007,7 @@
                 "type": "string",
                 "description": "User's skype",
                 "maxlength": 16,
-                "example": "+38012345678"
+                "example": "+380123456789"
               },
               "avatarUrl": {
                 "type": "string",
