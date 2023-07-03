@@ -205,6 +205,45 @@
         }
       }
     },
+    "/users/profile/pass": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Update user password",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordUpdateRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request: email or password is wrong"
+          },
+          "401": {
+            "description": "Unauthorized"
+          }
+        }
+      }
+    },
     "/api/reviews": {
       "get": {
         "tags": ["Reviews"],
@@ -882,7 +921,7 @@
               "birthday": {
                 "type": "string",
                 "description": "User's date of birth",
-                "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+                "pattern": "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
                 "example": "30/08/1995"
               },
               "email": {
@@ -955,7 +994,7 @@
           "birthday": {
             "type": "string",
             "description": "User's birthday",
-            "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+            "pattern": "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
             "example": "30/08/1995"
           },
           "phone": {
@@ -994,7 +1033,7 @@
               "birthday": {
                 "type": "string",
                 "description": "User's birthday",
-                "pattern": "^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
+                "pattern": "^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/((19[3-9][0-9])|(20[0-2][0-9])|2030)$",
                 "example": "30/08/1995"
               },
               "phone": {
@@ -1025,6 +1064,48 @@
           }
         },
         "required": ["data"]
+      },
+      "PasswordUpdateRequest": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's password",
+            "minLength": 6,
+            "example": "123456"
+          },
+          "newPassword": {
+            "type": "string",
+            "description": "New user's password",
+            "minLength": 6,
+            "example": "123456789"
+          }
+        },
+        "required": ["email", "password", "newPassword"]
+      },
+      "PasswordUpdateResponse": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
+            "example": "johndoe@example.com"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message",
+            "example": "Change password success"
+          }
+        }
       },
       "Review": {
         "type": "object",
