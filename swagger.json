@@ -12,7 +12,7 @@
   "servers": [
     { "url": "http://localhost:3000", "description": "Development server" },
     {
-      "url": " https://bra1n-gain-backend.onrender.com/",
+      "url": "https://bra1n-gain-backend.onrender.com",
       "description": "Production server"
     }
   ],
@@ -31,7 +31,7 @@
     }
   ],
   "paths": {
-    "/users/register": {
+    "/api/users/register": {
       "post": {
         "tags": ["Auth"],
         "summary": "Register a new user",
@@ -73,7 +73,7 @@
         }
       }
     },
-    "/users/login": {
+    "/api/users/login": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
@@ -114,13 +114,13 @@
         }
       }
     },
-    "/users/current": {
+    "/api/users/current": {
       "get": {
         "tags": ["Auth"],
         "summary": "Get current user",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "responses": {
@@ -140,13 +140,13 @@
         }
       }
     },
-    "/users/logout": {
+    "/api/users/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "responses": {
@@ -166,13 +166,13 @@
         }
       }
     },
-    "/users/profile": {
+    "/api/users/profile": {
       "patch": {
         "tags": ["Auth"],
         "summary": "Update user profile",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -205,13 +205,13 @@
         }
       }
     },
-    "/users/profile/pass": {
+    "/api/users/profile/pass": {
       "patch": {
         "tags": ["Auth"],
         "summary": "Update user password",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -271,7 +271,7 @@
         "summary": "Get own review",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "responses": {
@@ -308,7 +308,7 @@
         "summary": "Add own review",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -352,7 +352,7 @@
         "summary": "Update own review",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -399,7 +399,7 @@
         "summary": "Delete own review",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "responses": {
@@ -428,7 +428,7 @@
         "summary": "Get tasks",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "responses": {
@@ -481,7 +481,7 @@
         "summary": "Create a new task",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "requestBody": {
@@ -539,7 +539,7 @@
         "summary": "Get task by ID",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "parameters": [
@@ -596,7 +596,7 @@
         "summary": "Update a task",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "parameters": [
@@ -663,7 +663,7 @@
         "summary": "Delete a task",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "parameters": [
@@ -722,7 +722,7 @@
         "summary": "Change task category",
         "security": [
           {
-            "bearerAuth": []
+            "Bearer": []
           }
         ],
         "parameters": [
@@ -803,13 +803,13 @@
             "description": "User's email",
             "format": "email",
             "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-            "example": "johndoe@example.com"
+            "example": "john@example.com"
           },
           "password": {
             "type": "string",
             "description": "User's password",
             "minLength": 6,
-            "example": "1a2b3c"
+            "example": "123456789"
           }
         }
       },
@@ -836,11 +836,16 @@
                 "description": "User's email",
                 "format": "email",
                 "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-                "example": "johndoe@example.com"
+                "example": "john@example.com"
               },
               "avatarUrl": {
                 "type": "string",
                 "description": "User's avatar Url"
+              },
+              "createdAt": {
+                "type": "string",
+                "description": "User's create date",
+                "example": "2023-07-04T14:20:17.132Z"
               }
             },
             "required": ["name", "email", "avatarUrl"]
@@ -856,13 +861,13 @@
             "description": "User's email",
             "format": "email",
             "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-            "example": "johndoe@example.com"
+            "example": "john@example.com"
           },
           "password": {
             "type": "string",
             "description": "User's password",
             "minLength": 6,
-            "example": "1a2b3c"
+            "example": "1123456789"
           }
         },
         "required": ["email", "password"]
@@ -887,7 +892,7 @@
                 "description": "User's email",
                 "format": "email",
                 "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-                "example": "johndoe@example.com"
+                "example": "john@example.com"
               }
             },
             "required": ["name", "email"]
@@ -929,7 +934,7 @@
                 "description": "User's email",
                 "format": "email",
                 "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-                "example": "johndoe@example.com"
+                "example": "john@example.com"
               },
               "phone": {
                 "type": "string",
@@ -989,7 +994,7 @@
             "description": "User's email",
             "format": "email",
             "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-            "example": "johndoe@example.com"
+            "example": "john@example.com"
           },
           "birthday": {
             "type": "string",
@@ -1028,7 +1033,7 @@
                 "description": "User's email",
                 "format": "email",
                 "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-                "example": "johndoe@example.com"
+                "example": "john@example.com"
               },
               "birthday": {
                 "type": "string",
@@ -1073,7 +1078,7 @@
             "description": "User's email",
             "format": "email",
             "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-            "example": "johndoe@example.com"
+            "example": "john@example.com"
           },
           "password": {
             "type": "string",
@@ -1098,7 +1103,7 @@
             "description": "User's email",
             "format": "email",
             "pattern": "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$",
-            "example": "johndoe@example.com"
+            "example": "john@example.com"
           },
           "message": {
             "type": "string",
@@ -1342,13 +1347,13 @@
           }
         }
       }
-    }
-  },
-  "securitySchemes": {
-    "bearerAuth": {
-      "type": "http",
-      "scheme": "bearer",
-      "bearerFormat": "JWT"
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }
