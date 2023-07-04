@@ -2,7 +2,7 @@ const { ctrlWrapper, HttpError } = require('../helpers');
 const { Review } = require('../models/review');
 
 const getAllReviews = async (_, res) => {
-    const reviews = await Review.find();
+    const reviews = await Review.find().populate("owner", "name avatarUrl");
 
     if (reviews.length === 0) {
         return res.json({ message: 'There are no reviews' });
@@ -14,7 +14,7 @@ const getAllReviews = async (_, res) => {
 const getOwnReview = async (req, res) => {
     const { _id: owner } = req.user;
 
-    const ownReview = await Review.findOne({ owner });
+    const ownReview = await Review.findOne({ owner }).populate("owner", "name avatarUrl");
 
     if (!ownReview) {
         throw new HttpError(404, 'Review not found or does not exist');
@@ -25,7 +25,7 @@ const getOwnReview = async (req, res) => {
 
 const addOwnReview = async (req, res) => {
     const { rate, comment } = req.body;
-    const { _id: owner, name, avatarUrl} = req.user;
+    const { _id: owner} = req.user;
 
     const existingReview = await Review.findOne({ owner });
 
@@ -33,8 +33,9 @@ const addOwnReview = async (req, res) => {
         throw new HttpError(400, 'You have already left a review');
     }
 
-    const dataReview = new Review({ owner, name, avatarUrl, rate, comment });
-    const review = await dataReview.save();
+    await Review.create({ owner, rate, comment });
+        
+    const review = await Review.find({owner}).populate("owner", "name avatarUrl");
 
     res.status(201).json(review);
 };
