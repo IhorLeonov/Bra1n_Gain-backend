@@ -1,12 +1,5 @@
-const expressAsyncHandler = require('express-async-handler');
-const {
-  show,
-  showById,
-  add,
-  change,
-  changeCategory,
-  remove,
-} = require('../services');
+const { Task } = require('../models/task');
+const { HttpError, ctrlWrapper } = require('../helpers');
 const getCurentMonth = require('../helpers/dataTime');
 
 const getFilter = params => {
@@ -25,59 +18,100 @@ const getFilter = params => {
 };
 
 // Get all tasks
-const getTasks = expressAsyncHandler(async (req, res) => {
+const getTasks = async (req, res) => {
   const { _id: owner } = req.user;
   const filter = getFilter({ ...req.query });
-  const tasks = await show(owner, filter);
+  const tasks = await Task.find(
+    { owner, date: { $regex: filter, $options: 'i' } },
+    '-createdAt -updatedAt -__v'
+  );
+
+  if (!tasks) {
+    throw HttpError(400, 'Unable to fetch Tasks');
+  }
 
   res.status(200).json({ code: 200, data: tasks, count: tasks.length });
-});
+};
 
 // Get task by id
-const getTaskById = expressAsyncHandler(async (req, res) => {
+const getTaskById = async (req, res) => {
   const { id } = req.params;
-  const task = await showById(id);
+  const task = await Task.findById(id, '-createdAt -updatedAt -__v');
+
+  if (!task) {
+    throw HttpError(400, 'Unable to find task');
+  }
 
   res.status(200).json({ code: 200, data: task });
-});
+};
 
 // Add task
-const addTask = expressAsyncHandler(async (req, res) => {
+const addTask = async (req, res) => {
   const { _id: owner } = req.user;
-  const task = await add(owner, { ...req.body });
+  const tasks = await Task.create({ ...req.body, owner });
 
-  res.status(201).json({ code: 201, data: task });
-});
+  if (!tasks) {
+    throw HttpError(400, 'Unable to save to the database');
+  }
+
+  const { createdAt, updatedAt, __v, ...createdTask } = tasks.toObject();
+
+  res.status(201).json({ code: 201, createdTask });
+};
 
 // Change task
-const changeTask = expressAsyncHandler(async (req, res) => {
+const changeTask = async (req, res) => {
   const { id } = req.params;
-  const task = await change(id, { ...req.body });
+  const task = await Task.findByIdAndUpdate(
+    id,
+    { ...req.body },
+    {
+      new: true,
+      select: '-createdAt -updatedAt -__v',
+    }
+  );
+
+  if (!task) {
+    throw HttpError(400, 'Unable to find task');
+  }
 
   res.status(200).json({ code: 200, data: task });
-});
+};
 
 // Change task category
-const changeTaskCategory = expressAsyncHandler(async (req, res) => {
+const changeTaskCategory = async (req, res) => {
   const { id } = req.params;
-  const task = await changeCategory(id, { ...req.body });
+  const task = await Task.findByIdAndUpdate(id, req.body, {
+    new: true,
+    select: '-createdAt -updatedAt -__v',
+  });
+
+  if (!task) {
+    throw HttpError(400, 'Unable to find task');
+  }
 
   res.status(200).json({ code: 200, data: task });
-});
+};
 
 // Delete task
-const deleteTask = expressAsyncHandler(async (req, res) => {
+const deleteTask = async (req, res) => {
   const { id } = req.params;
-  const review = await remove(id);
+  const task = await Task.findByIdAndDelete(id, {
+    select: '-createdAt -updatedAt -__v',
+  });
 
-  res.status(200).json({ code: 200, data: review });
-});
+  if (!task) {
+    throw new HttpError(400, 'Unable to find task');
+  }
+
+  res.status(200).json({ code: 200, data: task });
+};
 
 module.exports = {
-  getTasks,
-  getTaskById,
-  addTask,
-  changeTask,
-  changeTaskCategory,
-  deleteTask,
+  getTasks: ctrlWrapper(getTasks),
+  getTaskById: ctrlWrapper(getTaskById),
+  addTask: ctrlWrapper(addTask),
+  changeTask: ctrlWrapper(changeTask),
+  changeTaskCategory: ctrlWrapper(changeTaskCategory),
+  deleteTask: ctrlWrapper(deleteTask),
 };
