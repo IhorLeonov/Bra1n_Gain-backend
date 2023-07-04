@@ -48,15 +48,13 @@ const getTaskById = async (req, res) => {
 // Add task
 const addTask = async (req, res) => {
   const { _id: owner } = req.user;
-  const tasks = await Task.create({ ...req.body, owner });
+  const task = await Task.create({ ...req.body, owner });
 
-  if (!tasks) {
+  if (!task) {
     throw HttpError(400, 'Unable to save to the database');
   }
 
-  const { createdAt, updatedAt, __v, ...createdTask } = tasks.toObject();
-
-  res.status(201).json({ code: 201, createdTask });
+  res.status(201).json({ code: 201, task });
 };
 
 // Change task
