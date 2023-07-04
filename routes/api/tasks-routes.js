@@ -5,7 +5,7 @@ const { validateBody, isValidId, authenticate } = require('../../middlewares');
 
 const {
   schemaAddTask,
-    schemaChangeCategoryTask,
+  schemaChangeCategoryTask,
 } = require('../../schemas/tasks-schema');
 
 // Get all tasks
@@ -15,7 +15,7 @@ router.get('/', authenticate, controller.getTasks);
 router.get('/:id', authenticate, isValidId, controller.getTaskById);
 
 // Add task
-router.post('/', authenticate, controller.addTask);
+router.post('/', authenticate, validateBody(schemaAddTask), controller.addTask);
 
 // Change task
 router.put(
