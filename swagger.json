@@ -1120,16 +1120,6 @@
             "description": "Review id",
             "example": "31d9792ab5a6b4a1a06dd56b"
           },
-          "name": {
-            "type": "string",
-            "description": "Reviewer name",
-            "example": "John Johnson"
-          },
-          "avatarUrl": {
-            "type": "string",
-            "description": "Reviewer avatar Url",
-            "example": "https://res.cloudinary.com/example/image/upload/123456/avatar.jpg"
-          },
           "rate": {
             "type": "number",
             "description": "Reviewer rate",
@@ -1142,9 +1132,25 @@
             "example": "This is a comment"
           },
           "owner": {
-            "type": "string",
-            "description": "User's id who left the review",
-            "example": "31d9792ab5a6b4a1a06dd56b"
+            "type": "object",
+            "description": "User's data",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "description": "User's id",
+                "example": "31d9792ab5a6b4a1a06dd56b"
+              },
+              "name": {
+                "type": "string",
+                "description": "User's name",
+                "example": "John Johnson"
+              },
+              "avatarUrl": {
+                "type": "string",
+                "description": "User's avatar Url",
+                "example": "https://res.cloudinary.com/example/image/upload/123456/avatar.jpg"
+              }
+            }
           },
           "createdAt": {
             "type": "string",
