@@ -4,6 +4,7 @@ const { catchAsync } = require('../utils');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { Review } = require('../models/review');
 const { SECRET_KEY, DEFAULT_AVATAR_URL } = process.env;
 
 const register = async (req, res) => {
@@ -193,7 +194,7 @@ const updateProfile = catchAsync(async (req, res, next) => {
     req.body.avatarUrl = req.file.path;
   }
 
-  const { birthday } = req.body;
+  const { birthday, name, avatarUrl } = req.body;
   if (birthday) {
     const registrationDate = new Date(user.createdAt);
     const userBirthday = new Date(birthday);
@@ -204,6 +205,20 @@ const updateProfile = catchAsync(async (req, res, next) => {
         'Date of birth cannot be later than the date of registration'
       );
     }
+  }
+
+  if (name || avatarUrl) {
+    const review = await Review.findOne({ owner: _id });
+
+    if (name) {
+      review.name = name;
+    }
+
+    if (avatarUrl) {
+      review.avatarUrl = avatarUrl;
+    }
+
+    await review.save();
   }
 
   const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
