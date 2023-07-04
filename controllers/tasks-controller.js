@@ -56,7 +56,7 @@ const addTask = async (req, res) => {
 
   const { createdAt, updatedAt, __v, ...createdTask } = tasks.toObject();
 
-  res.status(201).json({ code: 201, createdTask });
+  res.status(201).json(task);
 };
 
 // Change task
