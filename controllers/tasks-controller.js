@@ -54,7 +54,7 @@ const addTask = async (req, res) => {
     throw HttpError(400, 'Unable to save to the database');
   }
 
-  res.status(201).json(task);
+  res.status(201).json({ data: task });
 };
 
 // Change task
