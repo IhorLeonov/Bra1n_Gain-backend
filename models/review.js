@@ -5,14 +5,6 @@ const reviewRateList = [1, 2, 3, 4, 5];
 
 const reviewSchema = new Schema(
     {
-        name: {
-            type: String,
-            required: [true, 'Set name for review'],
-        },
-        avatarUrl: {
-            type: String,
-            required: false,
-        },
         rate: {
             type: Number,
             enum: reviewRateList,
