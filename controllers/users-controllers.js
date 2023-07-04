@@ -1,6 +1,5 @@
 const { User } = require('../models/user');
 const { ctrlWrapper, HttpError } = require('../helpers');
-const { catchAsync } = require('../utils');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -187,7 +186,7 @@ const logout = async (req, res) => {
   });
 };
 
-const updateProfile = catchAsync(async (req, res, next) => {
+const updateProfile = async (req, res, next) => {
   const { _id } = req.user;
   const user = await User.findById(_id).select('createdAt');
   if (req.file) {
@@ -228,9 +227,9 @@ const updateProfile = catchAsync(async (req, res, next) => {
   res.status(200).json({
     data: updatedUser,
   });
-});
+};
 
-const updateUserPassword = catchAsync(async (req, res, next) => {
+const updateUserPassword = async (req, res, next) => {
   const { _id } = req.user;
   const user = await User.findById(_id);
   const { email, password, newPassword } = req.body;
@@ -245,7 +244,7 @@ const updateUserPassword = catchAsync(async (req, res, next) => {
   });
 
   res.status(200).json({ email, message: 'Change password success' });
-});
+};
 
 module.exports = {
   register: ctrlWrapper(register),
