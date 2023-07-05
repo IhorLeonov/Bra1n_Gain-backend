@@ -206,23 +206,15 @@ const updateProfile = async (req, res, next) => {
     }
   }
 
-  if (name || avatarUrl) {
-    const review = await Review.findOne({ owner: _id });
-
-    if (name) {
-      review.name = name;
-    }
-
-    if (avatarUrl) {
-      review.avatarUrl = avatarUrl;
-    }
-
-    await review.save();
-  }
-
   const updatedUser = await User.findByIdAndUpdate(_id, req.body, {
     new: true,
   }).select('-password -updatedAt -createdAt -token');
+
+  // Check if the user has any reviews
+  const existingReview = await Review.findOne({ owner: _id });
+  if (existingReview && (name || avatarUrl)) {
+    await Review.updateOne({ owner: _id }, { $set: { name, avatarUrl } });
+  }
 
   res.status(200).json({
     data: updatedUser,
