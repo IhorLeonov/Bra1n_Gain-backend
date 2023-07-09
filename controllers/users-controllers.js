@@ -188,12 +188,13 @@ const logout = async (req, res) => {
 
 const updateProfile = async (req, res, next) => {
   const { _id } = req.user;
-  const user = await User.findById(_id).select('createdAt');
+  const { birthday, name, avatarUrl, email } = req.body;
+
   if (req.file) {
     req.body.avatarUrl = req.file.path;
   }
 
-  const { birthday, name, avatarUrl } = req.body;
+  const user = await User.findById(_id).select('createdAt');
   if (birthday) {
     const registrationDate = new Date(user.createdAt);
     const userBirthday = new Date(birthday);
@@ -203,6 +204,14 @@ const updateProfile = async (req, res, next) => {
         400,
         'Date of birth cannot be later than the date of registration'
       );
+    }
+  }
+
+  if (email) {
+    const existingUser = await User.findOne({ email });
+
+    if (existingUser) {
+      throw new HttpError(400, 'This email is already in the database');
     }
   }
 
