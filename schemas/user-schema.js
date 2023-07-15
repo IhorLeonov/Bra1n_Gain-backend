@@ -77,16 +77,16 @@ const passUpdSchema = Joi.object({
   }),
 });
 
-//   const emailSchema = Joi.object({
-//     email: Joi.string().pattern(emailRegexp).required(),
-//   });
+  const emailSchema = Joi.object({
+    email: Joi.string().pattern(emailRegexp).required(),
+  });
 
 const schemas = {
   registerSchema,
   loginSchema,
   updateUserProfileSchema,
   passUpdSchema,
-//   emailSchema,
+  emailSchema,
 };
 
 module.exports = {
