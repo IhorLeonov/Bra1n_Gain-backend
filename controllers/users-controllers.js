@@ -69,7 +69,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${PROJECT_URL}/verification/confirmation/${verificationCode}">Click verify email</a>`,
+    html: `<a target="_blank" href="${PROJECT_URL}/verification/${verificationCode}">Click verify email</a>`,
   };
 
   const data = await sendEmail(verifyEmail);
@@ -90,7 +90,7 @@ const verifyEmail = async (req, res) => {
   const user = await User.findOne({ verificationCode });
 
   if (!user) {
-    throw HttpError(401, 'Email not found');
+    throw new HttpError(401, 'Email not found');
   }
 
   await User.findByIdAndUpdate(user._id, {
@@ -108,17 +108,17 @@ const resendVerifyEmail = async (req, res) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw HttpError(401, 'Email not found');
+    throw new HttpError(401, 'Email not found');
   }
 
   if (user.verify) {
-    throw HttpError(401, 'Email already verify');
+    throw new HttpError(401, 'Email already verify');
   }
 
   const verifyEmail = {
     to: email,
     subject: 'Verify email',
-    html: `<a target="_blank" href="${PROJECT_URL}/verification/confirmation/${user.verificationCode}">Click verify email</a>`,
+    html: `<a target="_blank" href="${PROJECT_URL}/verification/${user.verificationCode}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
