@@ -52,9 +52,9 @@ const register = async (req, res) => {
   }
 
   if (user && !user.verify) {
-    throw new HttpError(400, 'This email exists, but it is not verified');
+    throw new HttpError(401, 'This email exists, but it is not verified');
   }
-  
+
   const avatarUrl = DEFAULT_AVATAR_URL;
   const hashPassword = await bcrypt.hash(password, 10);
   const verificationCode = nanoid();
@@ -72,8 +72,7 @@ const register = async (req, res) => {
     html: `<a target="_blank" href="${PROJECT_URL}/verification/${verificationCode}">Click verify email</a>`,
   };
 
-  const data = await sendEmail(verifyEmail);
-  console.log('data =>', data);
+  await sendEmail(verifyEmail);
 
   res.status(201).json({
     user: {
@@ -93,13 +92,28 @@ const verifyEmail = async (req, res) => {
     throw new HttpError(401, 'Email not found');
   }
 
-  await User.findByIdAndUpdate(user._id, {
+  if (user.verify) {
+    throw new HttpError(401, 'Email already verify');
+  }
+
+  const payload = {
+    id: user._id,
+  };
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: '23h' });
+
+  const verifiedUser = await User.findByIdAndUpdate(user._id, {
     verify: true,
     verificationCode: null,
+    token,
   });
 
   res.json({
-    message: 'Email verify success',
+    token,
+    user: {
+      name: verifiedUser.name,
+      email: verifiedUser.email,
+      avatarUrl: verifiedUser.avatarUrl,
+    },
   });
 };
 
@@ -158,7 +172,6 @@ const login = async (req, res) => {
     user: {
       name: user.name,
       email: user.email,
-      subscription: user.subscription,
       avatarUrl: user.avatarUrl,
     },
   });
