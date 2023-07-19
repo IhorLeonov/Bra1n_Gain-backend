@@ -13,6 +13,10 @@ const { schemas } = require('../../schemas/user-schema');
 
 const router = express.Router();
 
+router.get('/google-auth', ctrl.googleAuth);
+
+router.get('/google-redirect', ctrl.googleRedirect);
+
 router.post('/register', validateBody(schemas.registerSchema), ctrl.register);
 
 router.post('/login', validateBody(schemas.loginSchema), ctrl.login);
